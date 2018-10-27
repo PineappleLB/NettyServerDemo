@@ -4,3 +4,8 @@
 .project
 .settings
 *.class
+/NettyServerDemo/logs/
+/NettyServerDemo/target/
+/NettyServerDemo/.classpath
+/NettyServerDemo/.project
+/NettyServerDemo/.setting
