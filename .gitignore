@@ -9,3 +9,7 @@
 /NettyServerDemo/.classpath
 /NettyServerDemo/.project
 /NettyServerDemo/.setting
+/NettyClientDemo/target/
+/NettyClientDemo/.classpath
+/NettyClientDemo/.project
+/NettyClientDemo/.setting
