@@ -1,15 +1,12 @@
 /target/
 /log/
 .classpath
-.project
 .settings
 *.class
 /NettyServerDemo/logs/
 /NettyServerDemo/target/
 /NettyServerDemo/.classpath
-/NettyServerDemo/.project
 /NettyServerDemo/.setting
 /NettyClientDemo/target/
 /NettyClientDemo/.classpath
-/NettyClientDemo/.project
 /NettyClientDemo/.setting
