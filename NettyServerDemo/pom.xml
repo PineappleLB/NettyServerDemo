@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>club.pinea</groupId>
 		<artifactId>Server</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>NettyServerDemo</artifactId>
@@ -32,6 +32,11 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<version>2.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.2.0</version>
 		</dependency>
 
 	</dependencies>

@@ -8,6 +8,8 @@ import club.pinea.message.MessageCTX;
 import club.pinea.message.NetMessageHandler;
 import club.pinea.message.bytes.BytesNetMessageHandler;
 import club.pinea.message.object.ObjectNetMessageHandler;
+import club.pinea.message.proto.ProtoBufMessage;
+import club.pinea.message.proto.ProtoBufNetMessageHandler;
 import club.pinea.message.string.StringNetMessageHandler;
 import club.pinea.util.ThreadPoolUtil;
 
@@ -73,6 +75,9 @@ public class ServerQueue{
 						Object obj = msg.getMessasge();
 						if(obj instanceof String) {
 							NetMessageHandler<MessageCTX> msgHandler = new StringNetMessageHandler();
+							msgHandler.doMessage(msg);
+						} else if(obj instanceof ProtoBufMessage.Message) {
+							NetMessageHandler<MessageCTX> msgHandler = new ProtoBufNetMessageHandler();
 							msgHandler.doMessage(msg);
 						} else if(obj instanceof byte[]) {
 							NetMessageHandler<MessageCTX> msgHandler = new BytesNetMessageHandler();

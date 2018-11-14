@@ -24,7 +24,7 @@ public class ServerHandler {
 	}
 	
 	public void receiveMessage(Object message, IOSession session) {
-		queue.receiveMessage(new MessageCTX(session, (String)message));			
+		queue.receiveMessage(new MessageCTX(session, message));
 	}
 	
 }
