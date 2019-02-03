@@ -3,7 +3,6 @@ package club.pinea;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import club.pinea.server.queue.ServerQueue;
-import club.pinea.socket.custom.NettySocketServer;
 import club.pinea.socket.protobuf.ProtoBufServer;
 
 public class Application {
