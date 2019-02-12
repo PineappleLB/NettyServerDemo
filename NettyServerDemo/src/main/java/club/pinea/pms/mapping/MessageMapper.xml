@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="club.pinea.pms.dao.MessageMapper" >
+  <resultMap id="BaseResultMap" type="club.pinea.pms.model.Message" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="senderId" property="senderid" jdbcType="INTEGER" />
+    <result column="receiverId" property="receiverid" jdbcType="INTEGER" />
+    <result column="messageType" property="messagetype" jdbcType="BIT" />
+    <result column="sendTime" property="sendtime" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="club.pinea.pms.model.Message" extends="BaseResultMap" >
+    <result column="messageBody" property="messagebody" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, senderId, receiverId, messageType, sendTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    messageBody
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from messages
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from messages
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="club.pinea.pms.model.Message" >
+    insert into messages (id, senderId, receiverId, 
+      messageType, sendTime, messageBody
+      )
+    values (#{id,jdbcType=INTEGER}, #{senderid,jdbcType=INTEGER}, #{receiverid,jdbcType=INTEGER}, 
+      #{messagetype,jdbcType=BIT}, #{sendtime,jdbcType=BIGINT}, #{messagebody,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="club.pinea.pms.model.Message" >
+    insert into messages
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="senderid != null" >
+        senderId,
+      </if>
+      <if test="receiverid != null" >
+        receiverId,
+      </if>
+      <if test="messagetype != null" >
+        messageType,
+      </if>
+      <if test="sendtime != null" >
+        sendTime,
+      </if>
+      <if test="messagebody != null" >
+        messageBody,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="senderid != null" >
+        #{senderid,jdbcType=INTEGER},
+      </if>
+      <if test="receiverid != null" >
+        #{receiverid,jdbcType=INTEGER},
+      </if>
+      <if test="messagetype != null" >
+        #{messagetype,jdbcType=BIT},
+      </if>
+      <if test="sendtime != null" >
+        #{sendtime,jdbcType=BIGINT},
+      </if>
+      <if test="messagebody != null" >
+        #{messagebody,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="club.pinea.pms.model.Message" >
+    update messages
+    <set >
+      <if test="senderid != null" >
+        senderId = #{senderid,jdbcType=INTEGER},
+      </if>
+      <if test="receiverid != null" >
+        receiverId = #{receiverid,jdbcType=INTEGER},
+      </if>
+      <if test="messagetype != null" >
+        messageType = #{messagetype,jdbcType=BIT},
+      </if>
+      <if test="sendtime != null" >
+        sendTime = #{sendtime,jdbcType=BIGINT},
+      </if>
+      <if test="messagebody != null" >
+        messageBody = #{messagebody,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="club.pinea.pms.model.Message" >
+    update messages
+    set senderId = #{senderid,jdbcType=INTEGER},
+      receiverId = #{receiverid,jdbcType=INTEGER},
+      messageType = #{messagetype,jdbcType=BIT},
+      sendTime = #{sendtime,jdbcType=BIGINT},
+      messageBody = #{messagebody,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="club.pinea.pms.model.Message" >
+    update messages
+    set senderId = #{senderid,jdbcType=INTEGER},
+      receiverId = #{receiverid,jdbcType=INTEGER},
+      messageType = #{messagetype,jdbcType=BIT},
+      sendTime = #{sendtime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

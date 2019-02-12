@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="club.pinea.pms.dao.GroupMapper" >
+  <resultMap id="BaseResultMap" type="club.pinea.pms.model.Group" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="groupName" property="groupname" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="ownerId" property="ownerid" jdbcType="INTEGER" />
+    <result column="createBy" property="createby" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, groupName, description, ownerId, createBy, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from groups
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from groups
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="club.pinea.pms.model.Group" >
+    insert into groups (id, groupName, description, 
+      ownerId, createBy, createTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{groupname,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{ownerid,jdbcType=INTEGER}, #{createby,jdbcType=INTEGER}, #{createtime,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="club.pinea.pms.model.Group" >
+    insert into groups
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="groupname != null" >
+        groupName,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="ownerid != null" >
+        ownerId,
+      </if>
+      <if test="createby != null" >
+        createBy,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="groupname != null" >
+        #{groupname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerid != null" >
+        #{ownerid,jdbcType=INTEGER},
+      </if>
+      <if test="createby != null" >
+        #{createby,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="club.pinea.pms.model.Group" >
+    update groups
+    <set >
+      <if test="groupname != null" >
+        groupName = #{groupname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerid != null" >
+        ownerId = #{ownerid,jdbcType=INTEGER},
+      </if>
+      <if test="createby != null" >
+        createBy = #{createby,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="club.pinea.pms.model.Group" >
+    update groups
+    set groupName = #{groupname,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      ownerId = #{ownerid,jdbcType=INTEGER},
+      createBy = #{createby,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

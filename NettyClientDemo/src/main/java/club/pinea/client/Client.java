@@ -1,7 +1,6 @@
 package club.pinea.client;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 

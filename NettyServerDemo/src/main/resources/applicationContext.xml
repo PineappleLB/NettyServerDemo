@@ -58,7 +58,6 @@
 		<!-- 关闭abanded连接时输出错误日志 -->
 		<property name="logAbandoned" value="${jdbc.logAbandoned}" />
 		<!-- 监控数据库 -->
-		<!-- <property name="filters" value="mergeStat" /> -->
 		<property name="filters" value="stat" />
 	</bean>
 
@@ -66,7 +65,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations">
 			<array>
-				<value>classpath*:club/pinea/dao/*.xml</value>
+				<value>classpath*:club/pinea/pms/dao/*.xml</value>
 			</array>
 		</property>
 		<property name="configLocation" value="classpath:mybatis-config.xml"></property>

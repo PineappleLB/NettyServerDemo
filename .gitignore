@@ -5,3 +5,5 @@ classes
 *.settings
 *.class
 
+.idea
+*.iml
