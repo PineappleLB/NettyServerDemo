@@ -15,87 +15,84 @@ import club.pinea.pms.util.ThreadPoolUtil;
 
 /**
  * 服务器消息队列
- * 
- * @author pineapple
  *
+ * @author pineapple
  */
 public class ServerQueue {
 
-	private ServerQueue() {
-	}
+    private ServerQueue() {
+    }
 
-	private static class ServerQueueCreater {
-		private static ServerQueue queue = new ServerQueue();
-	}
+    private static class ServerQueueCreater {
+        private static ServerQueue queue = new ServerQueue();
+    }
 
-	public static ServerQueue getServerQueue() {
-		return ServerQueueCreater.queue;
-	}
+    public static ServerQueue getServerQueue() {
+        return ServerQueueCreater.queue;
+    }
 
-	Logger log = LogManager.getLogger(ServerQueue.class);
-	private volatile boolean flag = true;
+    Logger log = LogManager.getLogger(ServerQueue.class);
+    private volatile boolean flag = true;
 
-	LinkedBlockingQueue<MessageCTX> linkedQueue = new LinkedBlockingQueue<MessageCTX>();
+    LinkedBlockingQueue<MessageCTX> linkedQueue = new LinkedBlockingQueue<MessageCTX>();
 
-	public void begin() {
-		int process = Runtime.getRuntime().availableProcessors();
-		ThreadPoolUtil threadPool = ThreadPoolUtil.getInstance();
-		for (int i = 0; i < process; i++) {
-			threadPool.execute(new ServerQueueTaker(i));
-		}
-	}
+    public void begin() {
+        int process = Runtime.getRuntime().availableProcessors();
+        ThreadPoolUtil threadPool = ThreadPoolUtil.getInstance();
+        for (int i = 0; i < process; i++) {
+            threadPool.execute(new ServerQueueTaker(i));
+        }
+    }
 
-	public void receiveMessage(MessageCTX message) {
-		try {
-			linkedQueue.put(message);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+    public void receiveMessage(MessageCTX message) {
+        try {
+            linkedQueue.put(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-	private class ServerQueueTaker implements Runnable {
-		private int index;
+    private class ServerQueueTaker implements Runnable {
+        private int index;
 
-		public ServerQueueTaker(int index) {
-			this.index = index;
-		}
+        public ServerQueueTaker(int index) {
+            this.index = index;
+        }
 
-		@Override
-		public void run() {
-			Thread.currentThread().setName(Thread.currentThread().getName() + "消息处理线程 socket" + this.index);
-			while (flag) {
-				MessageCTX message = null;
-				try {
-					message = linkedQueue.take();
-				} catch (Exception e) {
-					log.error("{}", e);
-				}
-				final MessageCTX msg = message;
-				ThreadPoolUtil.getInstance().execute(new Runnable() {
-					public void run() {
-						// TODO 这里可以根据message来做出不同的netMessageHandler处理，我这里就直接使用StringNetMessageHandler处理
-						try {
-							Object obj = msg.getMessasge();
-							if (obj instanceof String) {
-								NetMessageHandler<MessageCTX> msgHandler = new StringNetMessageHandler();
-								msgHandler.doMessage(msg);
-							} else if (obj instanceof ProtoBufMessage.Message) {
-								NetMessageHandler<MessageCTX> msgHandler = new ProtoBufNetMessageHandler();
-								msgHandler.doMessage(msg);
-							} else if (obj instanceof byte[]) {
-								NetMessageHandler<MessageCTX> msgHandler = new BytesNetMessageHandler();
-								msgHandler.doMessage(msg);
-							} else {
-								NetMessageHandler<MessageCTX> msgHandler = new ObjectNetMessageHandler();
-								msgHandler.doMessage(msg);
-							}
-						} catch (Exception e) {
-							log.error("{}", e);
-						}
-					}
-				});
-			}
-		}
-	}
+        @Override
+        public void run() {
+            Thread.currentThread().setName(Thread.currentThread().getName() + "消息处理线程 socket" + this.index);
+            while (flag) {
+                MessageCTX message = null;
+                try {
+                    message = linkedQueue.take();
+                } catch (Exception e) {
+                    log.error("{}", e);
+                }
+                final MessageCTX msg = message;
+                ThreadPoolUtil.getInstance().execute(() -> {
+                    // TODO 这里可以根据message来做出不同的netMessageHandler处理，我这里就直接使用StringNetMessageHandler处理
+                    try {
+                        Object obj = msg.getMessasge();
+                        if (obj instanceof String) {
+                            NetMessageHandler<MessageCTX> msgHandler = new StringNetMessageHandler();
+                            msgHandler.doMessage(msg);
+                        } else if (obj instanceof ProtoBufMessage.Message) {
+                            NetMessageHandler<MessageCTX> msgHandler = new ProtoBufNetMessageHandler();
+                            msgHandler.doMessage(msg);
+                        } else if (obj instanceof byte[]) {
+                            NetMessageHandler<MessageCTX> msgHandler = new BytesNetMessageHandler();
+                            msgHandler.doMessage(msg);
+                        } else {
+                            NetMessageHandler<MessageCTX> msgHandler = new ObjectNetMessageHandler();
+                            msgHandler.doMessage(msg);
+                        }
+                    } catch (Exception e) {
+                        log.error("{}", e);
+                    }
+                });
+            }
+        }
+    }
 
 }

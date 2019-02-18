@@ -10,6 +10,9 @@ import club.pinea.pms.message.proto.ProtoBufMessage.Message;
 import club.pinea.pms.message.proto.ProtoBufMessage.Message.Builder;
 import io.netty.channel.ChannelFutureListener;
 
+/**
+ * @author pineapple
+ */
 public class ProtoBufNetMessageHandler implements NetMessageHandler<MessageCTX> {
 	Logger logger = LogManager.getLogger(ProtoBufNetMessageHandler.class);
 	public void doMessage(MessageCTX msg) {
