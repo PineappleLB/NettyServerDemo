@@ -32,15 +32,13 @@ public class SpringBeanFactory {
 		}
 		return factory;
 	}
-	
+
 	private SpringBeanFactory(){
 		this.springStart();
 	}
 	
 	public  void springStart() {
-//		String filePaht = "/"+System.getProperty("user.dir") + File.separator+"src"+File.separator+"main"+File.separator+"resources"+File.separator+"applicationContext.xml";
-//		System.out.println(filePaht);
-		context= new FileSystemXmlApplicationContext("file:" + File.separator + "applicationContext.xml");
+		context= new FileSystemXmlApplicationContext("classpath:applicationContext.xml");
 		//this.context = new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
 	}
 	/**

@@ -13,29 +13,30 @@ import club.pinea.pms.message.proto.ProtoBufNetMessageHandler;
 import club.pinea.pms.message.string.StringNetMessageHandler;
 import club.pinea.pms.util.ThreadPoolUtil;
 
-
 /**
  * 服务器消息队列
+ * 
  * @author pineapple
  *
  */
-public class ServerQueue{
+public class ServerQueue {
 
-	private ServerQueue() {}
-	
-	private static class ServerQueueCreater{
+	private ServerQueue() {
+	}
+
+	private static class ServerQueueCreater {
 		private static ServerQueue queue = new ServerQueue();
 	}
-	
+
 	public static ServerQueue getServerQueue() {
 		return ServerQueueCreater.queue;
 	}
-	
+
 	Logger log = LogManager.getLogger(ServerQueue.class);
 	private volatile boolean flag = true;
-	
+
 	LinkedBlockingQueue<MessageCTX> linkedQueue = new LinkedBlockingQueue<MessageCTX>();
-	
+
 	public void begin() {
 		int process = Runtime.getRuntime().availableProcessors();
 		ThreadPoolUtil threadPool = ThreadPoolUtil.getInstance();
@@ -43,7 +44,7 @@ public class ServerQueue{
 			threadPool.execute(new ServerQueueTaker(i));
 		}
 	}
-	
+
 	public void receiveMessage(MessageCTX message) {
 		try {
 			linkedQueue.put(message);
@@ -51,15 +52,17 @@ public class ServerQueue{
 			e.printStackTrace();
 		}
 	}
-	
-	private class ServerQueueTaker implements Runnable{
+
+	private class ServerQueueTaker implements Runnable {
 		private int index;
+
 		public ServerQueueTaker(int index) {
 			this.index = index;
 		}
-		
+
+		@Override
 		public void run() {
-			Thread.currentThread().setName(Thread.currentThread().getName()+"消息处理线程 socket" + this.index);
+			Thread.currentThread().setName(Thread.currentThread().getName() + "消息处理线程 socket" + this.index);
 			while (flag) {
 				MessageCTX message = null;
 				try {
@@ -70,16 +73,16 @@ public class ServerQueue{
 				final MessageCTX msg = message;
 				ThreadPoolUtil.getInstance().execute(new Runnable() {
 					public void run() {
-						//TODO 这里可以根据message来做出不同的netMessageHandler处理，我这里就直接使用StringNetMessageHandler处理
+						// TODO 这里可以根据message来做出不同的netMessageHandler处理，我这里就直接使用StringNetMessageHandler处理
 						try {
 							Object obj = msg.getMessasge();
-							if(obj instanceof String) {
+							if (obj instanceof String) {
 								NetMessageHandler<MessageCTX> msgHandler = new StringNetMessageHandler();
 								msgHandler.doMessage(msg);
-							} else if(obj instanceof ProtoBufMessage.Message) {
+							} else if (obj instanceof ProtoBufMessage.Message) {
 								NetMessageHandler<MessageCTX> msgHandler = new ProtoBufNetMessageHandler();
 								msgHandler.doMessage(msg);
-							} else if(obj instanceof byte[]) {
+							} else if (obj instanceof byte[]) {
 								NetMessageHandler<MessageCTX> msgHandler = new BytesNetMessageHandler();
 								msgHandler.doMessage(msg);
 							} else {
@@ -94,5 +97,5 @@ public class ServerQueue{
 			}
 		}
 	}
-	
+
 }
